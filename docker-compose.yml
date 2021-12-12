@@ -29,17 +29,16 @@ services:
     volumes:
           - data-volume:/opt/maven/data
 
-
   production:
     depends_on:
       - building
-    image: tomcat:alpine
+    build:
+      dockerfile: docker/run/Dockerfile
+      context: .
     ports:
       - '8080:8080'
     volumes:
       - data-volume:/data
-    command: bash -c "cp  /data/*.war /usr/local/tomcat/webapps/ &&  /data/*.properties /usr/local/tomcat/ROOT/ && catalina.sh run"
-
 
 volumes:
   data-volume:
