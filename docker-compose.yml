@@ -1,0 +1,46 @@
+version: '3'
+networks:
+  app:
+
+services:
+
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_USER: devops12
+      MYSQL_PASSWORD: secret12
+      MYSQL_DATABASE: database
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  building:
+    depends_on:
+      - db
+    build:
+      dockerfile: docker/build/Dockerfile
+      context: .
+      args:
+        USER: db_user
+        PWD: db_passwd
+        PORT: 3300
+        IP: db
+        DB_NAME: app_db
+    volumes:
+          - data-volume:/opt/maven/data
+
+
+  production:
+    depends_on:
+      - building
+    image: tomcat:alpine
+    ports:
+      - '8080:8080'
+    volumes:
+      - data-volume:/data
+    command: bash -c "cp  /data/*.war /usr/local/tomcat/webapps/ &&  /data/*.properties /usr/local/tomcat/ROOT/ && catalina.sh run"
+
+
+volumes:
+  data-volume:
+  dbdata:
