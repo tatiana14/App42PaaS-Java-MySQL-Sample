@@ -15,4 +15,3 @@ RUN echo app42.paas.db.username = ${USER} > ${env_file} \
 && echo app42.paas.db.name = ${DB_NAME} >> ${env_file}
 RUN mvn package
 RUN mkdir data && cp target/*.war data/ && cp WebContent/Config.properties data/Config.properties
-CMD tail -f /dev/null
