@@ -20,12 +20,6 @@ services:
     build:
       dockerfile: docker/build/Dockerfile
       context: .
-      args:
-        USER: db_user
-        PWD: db_passwd
-        PORT: 3300
-        IP: db
-        DB_NAME: app_db
     volumes:
           - data-volume:/opt/maven/data
 
